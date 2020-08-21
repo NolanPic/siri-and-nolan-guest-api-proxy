@@ -7,7 +7,9 @@ const getGuests = () => {
     accessToken: process.env.CONTENTFUL_TOKEN,
   });
 
-  return client.getEntries();
+  return client.getEntries().then((response) => {
+    return response.items;
+  });
 };
 
 const updateGuestStatus = (id, attending) => {
