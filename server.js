@@ -21,4 +21,15 @@ server.get("/api/guests", async (req, res) => {
   }
 });
 
+server.put("/api/guests/attending/:guestid", async (req, res) => {
+  const { guestid } = req.params;
+  try {
+    updateGuestStatus(guestid, true);
+    res.status(204).send();
+  } catch (err) {
+    console.warn("error", err);
+    res.status(500).send({ error: err });
+  }
+});
+
 module.exports = server;

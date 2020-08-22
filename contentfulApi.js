@@ -22,11 +22,13 @@ const updateGuestStatus = (id, attending) => {
     .then((space) => space.getEnvironment("master"))
     .then((environment) => environment.getEntry(id))
     .then((entry) => {
-      console.log(entry);
       entry.fields.attending = {
         "en-US": attending,
       };
       return entry.update();
+    })
+    .then((entry) => {
+      return entry.publish();
     });
 };
 
