@@ -1,11 +1,28 @@
 const contentful = require("contentful");
 const contentfulCMS = require("contentful-management");
 
-const getGuests = () => {
-  const client = contentful.createClient({
+const makeContentfulClient = () => {
+  return contentful.createClient({
     space: "kp3rjo141qje",
     accessToken: process.env.CONTENTFUL_TOKEN,
   });
+};
+
+const getPhotos = () => {
+  const client = makeContentfulClient();
+
+  return client
+    .getEntries({
+      order: "fields.order",
+      content_type: "photos",
+    })
+    .then((response) => {
+      return response.items.map((item) => formatPhotoEntry(item));
+    });
+};
+
+const getGuests = () => {
+  const client = makeContentfulClient();
 
   return client
     .getEntries({
@@ -49,7 +66,18 @@ function formatGuestEntry(guestEntry) {
   };
 }
 
+function formatPhotoEntry(photoEntry) {
+  return {
+    id: photoEntry.sys.id,
+    file: photoEntry.fields.file.fields.file.url + "?h=1000", // set height to 1000px
+    width: photoEntry.fields.width,
+    height: photoEntry.fields.height,
+    order: photoEntry.fields.order,
+  };
+}
+
 module.exports = {
+  getPhotos,
   getGuests,
   updateGuestStatus,
 };
