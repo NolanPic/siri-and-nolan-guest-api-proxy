@@ -8,7 +8,7 @@ const getGuests = () => {
   });
 
   return client.getEntries().then((response) => {
-    return response.items;
+    return response.items.map((item) => formatGuestEntry(item));
   });
 };
 
@@ -31,6 +31,18 @@ const updateGuestStatus = (id, attending) => {
       return entry.publish();
     });
 };
+
+function formatGuestEntry(guestEntry) {
+  // ensure that "attending" is not undefined, but an actual boolean
+  const attending = guestEntry.fields.attending ? true : false;
+
+  return {
+    id: guestEntry.sys.id,
+    firstName: guestEntry.fields.firstName,
+    lastName: guestEntry.fields.lastName,
+    attending,
+  };
+}
 
 module.exports = {
   getGuests,
