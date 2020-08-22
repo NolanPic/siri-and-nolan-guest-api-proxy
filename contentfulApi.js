@@ -7,9 +7,14 @@ const getGuests = () => {
     accessToken: process.env.CONTENTFUL_TOKEN,
   });
 
-  return client.getEntries().then((response) => {
-    return response.items.map((item) => formatGuestEntry(item));
-  });
+  return client
+    .getEntries({
+      order: "fields.lastName,fields.firstName",
+      content_type: "weddingGuest",
+    })
+    .then((response) => {
+      return response.items.map((item) => formatGuestEntry(item));
+    });
 };
 
 const updateGuestStatus = (id, attending) => {
