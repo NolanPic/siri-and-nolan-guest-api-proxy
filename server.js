@@ -3,7 +3,6 @@ const cors = require("cors");
 const helmet = require("helmet");
 const {
   getGuests,
-  getGuest,
   updateGuestStatus,
   getPhotos,
   formatGuestEntry,
