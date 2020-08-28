@@ -60,8 +60,12 @@ function formatGuestEntry(guestEntry) {
 
   return {
     id: guestEntry.sys.id,
-    firstName: guestEntry.fields.firstName,
-    lastName: guestEntry.fields.lastName,
+    firstName: guestEntry.fields.firstName["en-US"]
+      ? guestEntry.fields.firstName["en-US"]
+      : guestEntry.fields.firstName,
+    lastName: guestEntry.fields.lastName["en-US"]
+      ? guestEntry.fields.lastName["en-US"]
+      : guestEntry.fields.lastName,
     attending,
   };
 }
@@ -80,4 +84,5 @@ module.exports = {
   getPhotos,
   getGuests,
   updateGuestStatus,
+  formatGuestEntry,
 };
