@@ -9,9 +9,11 @@ const sendEmailNotification = (guest) => {
     },
   });
 
+  const sendTo = [process.env.EMAIL_RECIPIENT_1, process.env.EMAIL_RECIPIENT_2];
+
   const mailOptions = {
     from: process.env.EMAIL_USER,
-    to: process.env.EMAIL_RECIPIENT_1,
+    to: sendTo,
     subject: `Wedding attendance confirmed for ${guest.firstName} ${guest.lastName}`,
     text: `${guest.firstName} ${
       guest.lastName

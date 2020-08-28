@@ -1,7 +1,14 @@
 const express = require("express");
 const cors = require("cors");
 const helmet = require("helmet");
-const { getGuests, updateGuestStatus, getPhotos } = require("./contentfulApi");
+const {
+  getGuests,
+  getGuest,
+  updateGuestStatus,
+  getPhotos,
+  formatGuestEntry,
+} = require("./contentfulApi");
+const sendEmailNotification = require("./emailNotification");
 
 const server = express();
 server.use(helmet());
@@ -24,7 +31,10 @@ server.get("/api/guests", async (req, res) => {
 server.put("/api/guests/attending/:guestid", async (req, res) => {
   const { guestid } = req.params;
   try {
-    updateGuestStatus(guestid, true);
+    const guest = formatGuestEntry(await updateGuestStatus(guestid, true));
+
+    // send email notification
+    sendEmailNotification(guest);
     res.status(204).send();
   } catch (err) {
     console.warn("error", err);
